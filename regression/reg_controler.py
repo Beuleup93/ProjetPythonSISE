@@ -6,7 +6,6 @@ Created on Thu Oct 21 20:25:36 2021
 @author: macbookair
 """
 
-
 def regression_lineaire():
     pass
 
@@ -18,3 +17,4 @@ def random_forest():
 
 def knn():
     pass
+
