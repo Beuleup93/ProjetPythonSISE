@@ -11,6 +11,7 @@ from bokeh.models import ColumnDataSource
 from bokeh.models import Div
 from bokeh.plotting import figure
 from bokeh.models.widgets import DataTable, TableColumn
+from time import time
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -65,7 +66,12 @@ class Regression:
         self.fig= figure(title="Y reel en vert et Y prédit en rouge", plot_height = 400, plot_width = 800)
         self.fig.circle(range(len(self.YTest)), predictions[np.argsort(self.YTest)], color="red", size=8)
         self.fig.line(range(len(self.YTest)), np.sort(self.YTest), color = "green", line_width=2)
+        start = time()
         cross_validation = cross_val_score(lm, self.X, self.Y, cv=self.cv)
+        end=time()
+        self.duree_val_cv = Div(text="<h4>Temps d'éxecution : </h4>" + str(end-start))
+        print(self.duree_val_cv)
+        print(type(self.duree_val_cv))
         listCrosVal=["n°: "+str(i) for i in range(1,self.cv+1)]
         # resultats validation croisée
         dfTmp=pd.DataFrame({"n° cross validation":listCrosVal,"res":cross_validation})
@@ -99,7 +105,10 @@ class Regression:
         self.fig.circle(range(len(self.YTest)), predictions[np.argsort(self.YTest)], color="red", size=8)
         self.fig.line(range(len(self.YTest)), np.sort(self.YTest), color = "blue", line_width=2)
         # Cross validation
+        start = time()
         cross_validation = cross_val_score(knn_reg, self.X, self.Y, cv=self.cv)
+        end=time()
+        self.duree_val_cv = Div(text="<h4>Temps d'éxecution : </h4>" + str(end-start))
         listCrosVal = ["n°: "+str(i) for i in range(1,self.cv+1)]
         dfTmp=pd.DataFrame({"n° cross validation":listCrosVal,"res":cross_validation})
         columns_vc=[TableColumn(field=Ci, title=Ci) for Ci in dfTmp.columns] 
@@ -138,7 +147,10 @@ class Regression:
         self.fig.circle(range(len(self.YTest)), predictions[np.argsort(self.YTest)], color="red", size=8)
         self.fig.line(range(len(self.YTest)), np.sort(self.YTest), color = "blue", line_width=2)
         # Cross validation
+        start = time()
         cross_validation = cross_val_score(rf_reg, self.X, self.Y, cv=self.cv)
+        end=time()
+        self.duree_val_cv = Div(text="<h4>Temps d'éxecution : </h4>" + str(end-start))
         listCrosVal = ["n°: "+str(i) for i in range(1,self.cv+1)]
         dfTmp=pd.DataFrame({"n° cross validation":listCrosVal,"res":cross_validation})
         columns_vc=[TableColumn(field=Ci, title=Ci) for Ci in dfTmp.columns] 

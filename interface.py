@@ -21,6 +21,7 @@ warnings.filterwarnings("ignore")
 # MY personnal module
 from Regressions import Regression
 from Classification import Classification
+#from bokeh.models import MultiChoice
 
 # DATAFRAME À CHARGER À PARTIR DU FILEINPUT
 data = pd.DataFrame()
@@ -53,10 +54,11 @@ columns_correlation = [TableColumn(field=col, title=col) for col in data.columns
 columns_coef = [TableColumn(field=col, title=col) for col in data.columns]
 columns_prediction = [TableColumn(field=col, title=col) for col in data.columns]
 # FOR LOADING DATA
-file_input = FileInput(accept=".csv, .xlsx", width=500)
+file_input = FileInput(accept=".csv, .xlsx", width=400)
 
 # VERIFIER LE TYPE DE VARIABLES
 def verifier_type_var(df,nom_va):
+    print(nom_va)
     if (np.issubdtype(df[nom_va].dtype, np.number)==True):
         return 'Numeric'
     else:
@@ -65,6 +67,7 @@ def verifier_type_var(df,nom_va):
 # FONCTION CALLBACK À APPELLER 
 def callback_select(attr, old, new):
     data = pd.read_csv(io.BytesIO(base64.b64decode(file_input.value)))
+    data = data.dropna()
     # COURANTE VALEUR DANS LE SELECT
     x = select_x.value
     y = select_y.value
@@ -90,7 +93,6 @@ def callback_select(attr, old, new):
         
         # PROJECTON DANS LE PLAN EN COLORIANT SELON LA VARIABLE CIBLE
         if(str(color_var)!="select variable color"):
-            print(str(color_var))
             # METTRE À JOUR LA SOURCE AVEC LA VARIABLE DE COULEUR
             source_cor_plot.data =  {
             'x': data[x],
@@ -131,6 +133,7 @@ select_color = Select(title="Color variable(Projection)", value="select variable
 
 def getChoiceForLearning(attr, old, new):
     data = pd.read_csv(io.BytesIO(base64.b64decode(file_input.value)))
+    data = data.dropna()
     if verifier_type_var(data,str(select_cible.value)) == "Numeric":
         select_algorithm.options = ["select regression algorithm"] + algo_reg
     elif verifier_type_var(data,str(select_cible.value)) == "String":
@@ -139,6 +142,7 @@ def getChoiceForLearning(attr, old, new):
 def get_cible_and_remove_in_explicatives(attr, old, new):
     # Ici on supprime la variable cible sur la liste des variables explicatives
     data = pd.read_csv(io.BytesIO(base64.b64decode(file_input.value)))
+    data = data.dropna()
     multi_select_explicative.options = list(data.columns)
     variable_cible = select_cible.value
     if variable_cible in multi_select_explicative.options:
@@ -148,6 +152,7 @@ def get_cible_and_remove_in_explicatives(attr, old, new):
     l'utilisateur pour lancer l'apprentisage'''
 def apprentissage_suppervise():
     data = pd.read_csv(io.BytesIO(base64.b64decode(file_input.value)))
+    data = data.dropna()
     taille_train = slider.value
     kv = slider_kv.value
     kvoisin = slider_kvoisin.value
@@ -212,6 +217,23 @@ select_cible.on_change('value',getChoiceForLearning)
 #multi_select_explicative.on_change('value',getChoiceForLearning)
 #select_algorithm.on_change('value',getChoiceForLearning)
 
+# PRETRAITEMENT
+'''
+def do_pretraitement(attr, old, new):
+    data = pd.read_csv(io.BytesIO(base64.b64decode(file_input.value)))
+    choice = multi_choice.value 
+    if len(choice)>0:
+        for op in choice:
+            if op == 'Remove NA':
+                data = data.dropna()
+            elif op == 'Replace NA BY MEAN':
+                print('Replace by Mean')
+
+OPTIONS = ["Remove NA", "Replace NA BY MEAN"]
+multi_choice = MultiChoice(value=["Choose"], options=OPTIONS)
+multi_choice.on_change('value',do_pretraitement)
+'''
+
 # EVENMENTS DECLENCHÉ PAR LE USERS 
 select_x.on_change('value', callback_select)
 select_y.on_change('value', callback_select)
@@ -228,7 +250,8 @@ def load_data(attr, old, new):
     # CREATION DE LA CONTENUE
     decoded=base64.b64decode(new)
     f=io.BytesIO(decoded)
-    data= pd.read_csv(f, sep='\n|;|,')
+    data = pd.read_csv(f, sep='\n|;|,')
+    data = data.dropna()
     source.data=data
     data_table.columns=[TableColumn(field=col, title=col) for col in data.columns]
     select_color.options =(select_color.options)+([option for option in list(data.columns) if verifier_type_var(data,option)=="String"])
@@ -264,13 +287,13 @@ def refresh_reg_multi(obj):
     child_reg1.children[4]=obj.title_for_coeff
     child_reg1.children[5]=obj.coefficients
     
-    child_reg2.children[0]=saut_ligne
-    child_reg2.children[1]=obj.title_moy_vc
-    child_reg2.children[2]=obj.mean_val_croisee
-    child_reg2.children[3]=saut_ligne
-    child_reg2.children[4]=obj.title_vc
-    child_reg2.children[5]=obj.cross_validation
-    child_reg2.children[6]=saut_ligne
+    child_reg2.children[0]= saut_ligne
+    child_reg2.children[1]= obj.title_moy_vc
+    child_reg2.children[2]= obj.mean_val_croisee
+    child_reg2.children[3]= saut_ligne
+    child_reg2.children[4]= obj.duree_val_cv
+    child_reg2.children[5]= obj.title_vc
+    child_reg2.children[6]= obj.cross_validation
     
     child_reg3.children[0]=saut_ligne
     child_reg3.children[1]=obj.title_fig 
@@ -299,12 +322,12 @@ def refresh_reg_multi(obj):
     #child_reg.on_change('value', lambda attr, old, new: update_vc(new_df))
 def refresh_reg_knn(obj):
     
-    child_reg1.children[0]=saut_ligne
-    child_reg1.children[1]=obj.title_moy_vc
-    child_reg1.children[2]=obj.mean_val_croisee
-    child_reg1.children[3]=saut_ligne
-    child_reg1.children[4]=obj.title_vc
-    child_reg1.children[5]=obj.cross_validation
+    child_reg1.children[0]= obj.title_moy_vc
+    child_reg1.children[1]= obj.mean_val_croisee
+    child_reg1.children[2]= saut_ligne
+    child_reg1.children[3]= obj.duree_val_cv
+    child_reg1.children[4]= obj.title_vc
+    child_reg1.children[5]= obj.cross_validation
     
     child_reg2.children[0]=saut_ligne
     child_reg2.children[1]=obj.figcurve
@@ -342,9 +365,9 @@ def refresh_random_forest(obj):
     child_reg1.children[0]= obj.title_moy_vc
     child_reg1.children[1]=obj.mean_val_croisee
     child_reg1.children[2]= saut_ligne
-    child_reg1.children[3]=obj.title_vc
-    child_reg1.children[4]=obj.cross_validation
-    child_reg1.children[5]=saut_ligne
+    child_reg1.children[3]= obj.duree_val_cv 
+    child_reg1.children[4]= obj.title_vc
+    child_reg1.children[5]= obj.cross_validation
     
     child_reg2.children[0]=saut_ligne
     child_reg2.children[1]=saut_ligne
@@ -412,13 +435,13 @@ def refresh_decision_tree(obj):
     child_reg4.children[4]= obj.rapel_class
     child_reg4.children[5]= saut_ligne
     child_reg4.children[6]= obj.precclasse
-    child_perf.children[0]= obj.moy_succes
+    child_perf.children[0]= obj.duree_val_cv  
     child_perf.children[1]= saut_ligne
     child_perf.children[2]= obj.int_succes
     child_perf.children[3]= saut_ligne
-    child_perf.children[4]= obj.title_rapport 
-    child_perf.children[5]= obj.rapport
-    child_perf.children[6]= saut_ligne
+    child_perf.children[4]= obj.moy_succes 
+    child_perf.children[5]= obj.title_rapport  
+    child_perf.children[6]= obj.rapport
     
     child_var.children[0] = obj.title_impVariables
     child_var.children[1] = obj.importance_variables
@@ -451,11 +474,11 @@ def refresh_analyse_discriminante(obj):
     child_reg4.children[4]= obj.rapport_qualite
     child_reg4.children[5]= saut_ligne
     child_reg4.children[6]= saut_ligne
-    child_perf.children[0]= obj.moy_succes_rate
+    child_perf.children[0]= obj.duree_val_cv  
     child_perf.children[1]= saut_ligne
     child_perf.children[2]= obj.int_succes
     child_perf.children[3]= saut_ligne
-    child_perf.children[4]= saut_ligne 
+    child_perf.children[4]= obj.moy_succes_rate 
     child_perf.children[5]= saut_ligne
     child_perf.children[6]= saut_ligne
     
@@ -472,11 +495,11 @@ def refresh_regression_logistique(obj):
     child_reg1.children[4]= saut_ligne
     child_reg1.children[5]= obj.log_vraisemblance
     
-    child_reg2.children[0]=obj.int_succes
+    child_reg2.children[0]= obj.duree_val_cv 
     child_reg2.children[1]=saut_ligne
-    child_reg2.children[2]=obj.moy_succes
+    child_reg2.children[2]= obj.int_succes 
     child_reg2.children[3]=saut_ligne
-    child_reg2.children[4]=saut_ligne
+    child_reg2.children[4]=obj.moy_succes
     child_reg2.children[5]=saut_ligne
     child_reg2.children[6]=saut_ligne
     
@@ -527,16 +550,19 @@ corr_plot.title_location="above"
 plot_proj = figure(title="Projection dans le plan par rapport à sepal_length et sepal_width",plot_height = 350)
 
 # TABS PANEL SECTION 
-title = Div(text="<center><h3>INTERFACE D'ANALYSE DE DONNÉES</h3></center>", height=2)
-p1 = Div(text="<center><h4>Statistique Descriptive et exploration des données</h4></center>")
-line1 = Paragraph(text="_________________________________________________________")
-p2  = Div(text="<center><h4>Apprentissage suppervisé</h4></center>",height=2)
-p3  = Div(text="<center><h4>Regularisation et Optimisation</h4></center>",height=2)
+title = Div(text="<center><h2>INTERFACE D'ANALYSE DE DONNÉES</h2></center>", height=2)
+p1 = Div(text="<h3>Statistique Descriptive et visualisation </h3>")
+line1 = Paragraph(text="____________________________________________________________________________")
+p2  = Div(text="<h3>Apprentissage suppervisé</h3>",height=2)
+p3  = Div(text="<h3>Quelques Prétraitements</h3>",height=2)
+
 
 # CREATION SECTION 
-section1 = column(title,p1,line1)
-section2 = column(p2,line1)
-section3 = column(p3,line1)
+section0 = column(title,line1)
+section1 = column(p1)
+section3 = column(p2)
+section2 = column(p3)
+
 
 header_coefficient = Div(text="")
 header_intercept = Div(text="")
@@ -550,7 +576,7 @@ panel4= Panel(child=plot_proj, title="Projection des points dans le plan")
 
 # AFFICHAGE APPRENTISSAGE SUPPERVISÉ
 #creation du layout correspondant
-line=Div(text="__________________________________________________________________________")
+line=Div(text="")
 Previsualisation_data=Div(text="<center><h2 >Prévisualisation des données</h2></center>")
 saut_ligne=Div(text="<br/>")
 title_reg=Div(text="<center><h3>Sortie apprentissage suppervisé</h3></center>")
@@ -567,12 +593,15 @@ panel_reg_pred = Panel(child=child_reg3, title="Prédiction sur l'echantillon de
 panel_reg_perf = Panel(child=row(child_reg4,child_perf), title="Mesures des performances")
 panel_var = Panel(child=child_var, title="Variables pertinentes")
 
-layout = row(column(section1,
+layout = row(column(section0,
+                    section1,
                     file_input, 
                     select_x, 
                     select_y,
                     select_color,
                     section2,
+                    #multi_choice,
+                    section3,
                     select_cible,
                     multi_select_explicative,
                     select_algorithm,
@@ -581,8 +610,8 @@ layout = row(column(section1,
                     slider_kvoisin,
                     slider_profondeur,
                     slider_nbArbreRF,
-                    lancer_app,
-                    section3), 
+                    lancer_app
+                    ), 
             column(Paragraph(text="     ")),
             column(Tabs(tabs=[panel1, panel2, panel3, panel4]),
                    Tabs(tabs=[panel_regression, panel_reg_pred, panel_reg_perf, panel_var])))

@@ -19,6 +19,7 @@ from statsmodels.tools import add_constant
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas
+from time import time
 
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure
@@ -44,6 +45,7 @@ class Classification:
         # creation du modéle
         dtree = DecisionTreeClassifier(max_depth = self.nb_feuille)
         dtree.fit(self.XTrain,self.YTrain)
+        print(dtree)
         
         '''
             Affichage de l'arbre avec toutes les informations
@@ -107,7 +109,10 @@ class Classification:
         self.title_rapport=Div(text="<h4> Rapport sur la qualité de prédiction :</h4>")
         self.rapport=Div(text=str(rapport_general))
         # Evaluation du modéle en validation croisée
+        start=time()
         succes = model_selection.cross_val_score(dtree,self.X,self.Y,cv=self.cv,scoring='accuracy')
+        end=time()
+        self.duree_val_cv = Div(text="<h4>Temps d'éxecution : </h4>" + str(end-start))
         self.int_succes=Div(text="<h4>Succès de la validation croisée :</h4>"+ str(succes))
         #moyenne des taux de succès = estimation du taux de succès en CV
         self.moy_succes=Div(text="<h4>Moyenne des succès :</h4>" + str(round(succes.mean(),4))) 
@@ -177,7 +182,10 @@ class Classification:
         '''sensibilité(rappel) et précision par classe'''
         self.rapport_qualite=Div(text="<h4>Rapport sur la qualité de prédiction : </h4>"+str(metrics.classification_report(self.YTest,predictions)))
         '''Validation croisée by defalt cv = 5'''
+        start = time()
         cv_score = model_selection.cross_val_score(lda,self.X,self.Y,cv=self.cv,scoring='accuracy')
+        end=time()
+        self.duree_val_cv = Div(text="<h4>Temps d'éxecution : </h4>" + str(end-start))
         self.int_succes=Div(text="<h4>Succès de la validation croisée :</h4>"+ str(cv_score))
         '''estimation du taux de succès en CV'''
         self.moy_succes_rate=Div(text="<h4>Moyenne des accuracy :</h4>" + str(round(cv_score.mean(),4))) 
@@ -321,7 +329,10 @@ class Classification:
             self.accuracy_roc=Div(text="")
             
         '''Evaluation du modéle en validation'''
+        start = time()
         succes = model_selection.cross_val_score(regLog,self.X,self.Y,cv=self.cv,scoring='accuracy')
+        end=time()
+        self.duree_val_cv = Div(text="<h4>Temps d'éxecution : </h4>" + str(end-start))
         self.int_succes=Div(text="<h4>Succès de la validation croisée :</h4>"+ str(succes))
         '''Estimation des taux de succes: Moyenne des succes'''
         self.moy_succes=Div(text="<h4>Moyenne des succès :</h4>" + str(round(succes.mean(),4))) 
