@@ -25,7 +25,7 @@ to load his data
  * Creation of the graphical interface with bokeh.
 
 ### Architecture
-<div>
+<div align="center">
   <img width="800" alt="Capture d’écran 2021-12-05 à 16 14 01" src="https://user-images.githubusercontent.com/31353252/144754341-d27943b9-1169-4a62-9d51-15b0ce9a7569.png">
 </div>
 
@@ -41,5 +41,9 @@ We have applied the concepts of object-oriented programming for a better organiz
 - **Regression.py** which contains our business logic for regression
 - **Classification.py** contains the business logic for classification
 
-
-
+### User's guide
+In this section, we will provide you with a user's guide, presenting the different possibilities offered by our solution:
+<br/>
+<div align = "center">
+<img width="800" alt="Capture d’écran 2021-12-05 à 16 22 36" src="https://user-images.githubusercontent.com/31353252/144754628-d65bb441-c83a-44f0-9452-e2dfef0f5a1d.png">
+</div>
