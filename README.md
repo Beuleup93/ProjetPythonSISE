@@ -26,7 +26,7 @@ to load his data
 
 ### Architecture
 <div align="center">
-  <img width="800" alt="Capture d’écran 2021-12-05 à 16 14 01" src="https://user-images.githubusercontent.com/31353252/144754341-d27943b9-1169-4a62-9d51-15b0ce9a7569.png">
+  <img width="600" alt="Capture d’écran 2021-12-05 à 16 14 01" src="https://user-images.githubusercontent.com/31353252/144754341-d27943b9-1169-4a62-9d51-15b0ce9a7569.png">
 </div>
 
 <br/>
