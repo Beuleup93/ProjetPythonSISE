@@ -29,3 +29,17 @@ to load his data
   <img width="800" alt="Capture d’écran 2021-12-05 à 16 14 01" src="https://user-images.githubusercontent.com/31353252/144754341-d27943b9-1169-4a62-9d51-15b0ce9a7569.png">
 </div>
 
+<br/>
+This architecture explains the different messages exchanged between the system and the outside. 
+  1. The user interacts with the interface (Front End) to make a request;
+  2. From the interface, function calls (Back End) are made;
+  3. The Back End performs the operations and returns the result to the interface (Front End) 
+  4. The interface returns the result to the user <br/>
+
+We have applied the concepts of object-oriented programming for a better organization of the code. In summary, we have three files :
+- **Interface.py** which contains all the components of our application, and therefore constitutes our front end. 
+- **Regression.py** which contains our business logic for regression
+- **Classification.py** contains the business logic for classification
+
+
+
