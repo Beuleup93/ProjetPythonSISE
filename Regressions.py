@@ -19,10 +19,15 @@ warnings.filterwarnings("ignore")
 class Regression:
 
     def __init__(self, dataframe, explicatives, cible, taille, kv, kvoisin, NbTreeForRandomForest):
+        var_quanti = [var_quanti for var_quanti in explicatives if dataframe[str(var_quanti)].dtypes!=object]
         self.taille = (100-taille)/100
         self.dataframe=dataframe
         self.Y=dataframe[cible]
-        self.X=dataframe[explicatives]
+        if len(var_quanti)>0:
+            self.X = dataframe[var_quanti]
+        else:
+            self.X = dataframe[explicatives]
+        print(self.X)
         self.cv = kv # for cross validation
         self.k = kvoisin
         self.NbTreeForRandomForest = NbTreeForRandomForest 

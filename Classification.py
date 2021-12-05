@@ -30,35 +30,42 @@ from bokeh.models import  Div
 class Classification:
     
     def __init__(self, dataframe, explicatives, cible, taille, cv,nb_feuille):
+        var_quali = [var_quali for var_quali in explicatives if dataframe[str(var_quali)].dtypes==object]
         self.taille = (100-taille)/100
         self.dataframe=dataframe
         self.Y=dataframe[cible]
-        self.X=dataframe[explicatives]
+        if len(var_quali)>0:
+            self.X = pandas.get_dummies(dataframe[explicatives], columns=var_quali) 
+        else:
+            self.X = dataframe[explicatives]
+        print(self.X)
         self.cible = cible
         self.cv = cv
         self.nb_feuille = nb_feuille
         self.explicatives = explicatives
         self.XTrain, self.XTest, self.YTrain, self.YTest = train_test_split(self.X, self.Y, test_size=self.taille, random_state = 1)
+        
 
 
     def arbre_decision_class(self):
+        
         # creation du modéle
         dtree = DecisionTreeClassifier(max_depth = self.nb_feuille)
         dtree.fit(self.XTrain,self.YTrain)
+        self.title_algo=Div(text="<h4><center>ARBRE DE DECISION</center></h4>")
         print(dtree)
-        
         '''
             Affichage de l'arbre avec toutes les informations
             Affichage sous formes d'un ensemble de régles
             On stocke le plot sous forme d'image dans le rep courant
             puis on l'affiche dans l'interfache graphique
         ''' 
-        tree_rules = export_graphviz(dtree,feature_names = list(self.dataframe.columns[:-1]))
-        self.reglesT=Div(text="<h4>Régles de décision : </h4>")
+        tree_rules = export_graphviz(dtree,feature_names = list(self.XTrain.columns))
+        self.reglesT=Div(text="<h4>Régles de décision </h4>")
         self.regles=Div(text=str(tree_rules))
         self.treeT=Div(text="<h4>Arbre de décision : </h4>")
         plt.figure()
-        plot_tree(dtree,feature_names = list(self.dataframe.columns[:-1]),filled=True)
+        plot_tree(dtree,feature_names = list(self.XTrain.columns),filled=True)
         plt.savefig('tree.jpg', dpi=95)
         self.tree= Div(text="""<img src="tree.jpg", alt="'tree.jpg' est enregistrée dans le dossier courant">""", width=150, height=150)
         

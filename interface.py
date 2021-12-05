@@ -54,11 +54,11 @@ columns_correlation = [TableColumn(field=col, title=col) for col in data.columns
 columns_coef = [TableColumn(field=col, title=col) for col in data.columns]
 columns_prediction = [TableColumn(field=col, title=col) for col in data.columns]
 # FOR LOADING DATA
-file_input = FileInput(accept=".csv, .xlsx", width=400)
+file_input = FileInput(accept=".csv", width=400)
 
 # VERIFIER LE TYPE DE VARIABLES
 def verifier_type_var(df,nom_va):
-    print(nom_va)
+    #print(nom_va,df[nom_va].dtypes)
     if (np.issubdtype(df[nom_va].dtype, np.number)==True):
         return 'Numeric'
     else:
@@ -127,8 +127,8 @@ def callback_select(attr, old, new):
    
 
 # SELECT OPTIONS FOR CORRELATION AND PROJECTION
-select_x = Select(title="variable_xaxix", value="select variable x", options = ["select variable x"])
-select_y = Select(title="variable_yaxix", value="select variable y", options = ["select variable y"])
+select_x = Select(title="variable_xaxis", value="select variable x", options = ["select variable x"])
+select_y = Select(title="variable_yaxis", value="select variable y", options = ["select variable y"])
 select_color = Select(title="Color variable(Projection)", value="select variable color", options = ["select variable color"])
 
 def getChoiceForLearning(attr, old, new):
@@ -144,7 +144,7 @@ def get_cible_and_remove_in_explicatives(attr, old, new):
     data = pd.read_csv(io.BytesIO(base64.b64decode(file_input.value)))
     data = data.dropna()
     multi_select_explicative.options = list(data.columns)
-    variable_cible = select_cible.value
+    variable_cible = str(select_cible.value)
     if variable_cible in multi_select_explicative.options:
         multi_select_explicative.options.remove(variable_cible)
 
@@ -208,31 +208,14 @@ slider = Slider(start = 50, end=80, step=10, value=70, title="Taille Train Set")
 slider_kv = Slider(start = 0, end=30, step=1, value=5, title="K-fold")
 slider_kvoisin = Slider(start = 0, end=10, step=1, value=5, title="K-Voisins")
 slider_profondeur = Slider(start = 2, end=10, step=1, value=2, title="Profondeur Arbre Decision")
-slider_nbArbreRF = Slider(start = 50, end=500, step=50, value=100, title="Nombre Arbre for Random Forest")
+slider_nbArbreRF = Slider(start = 50, end=500, step=50, value=100, title="Nombre Arbre - Random Forest")
 lancer_app = Button(label = "LANCER APPRENTISSAGE", button_type = "success", width=70, height=40)
 lancer_app.on_click(apprentissage_suppervise)
 
-select_cible.on_change('value',get_cible_and_remove_in_explicatives)
 select_cible.on_change('value',getChoiceForLearning)
+select_cible.on_change('value',get_cible_and_remove_in_explicatives)
 #multi_select_explicative.on_change('value',getChoiceForLearning)
 #select_algorithm.on_change('value',getChoiceForLearning)
-
-# PRETRAITEMENT
-'''
-def do_pretraitement(attr, old, new):
-    data = pd.read_csv(io.BytesIO(base64.b64decode(file_input.value)))
-    choice = multi_choice.value 
-    if len(choice)>0:
-        for op in choice:
-            if op == 'Remove NA':
-                data = data.dropna()
-            elif op == 'Replace NA BY MEAN':
-                print('Replace by Mean')
-
-OPTIONS = ["Remove NA", "Replace NA BY MEAN"]
-multi_choice = MultiChoice(value=["Choose"], options=OPTIONS)
-multi_choice.on_change('value',do_pretraitement)
-'''
 
 # EVENMENTS DECLENCHÉ PAR LE USERS 
 select_x.on_change('value', callback_select)
@@ -241,6 +224,7 @@ select_color.on_change('value', callback_select)
 
 # CALLBACK CHARGEMENT
 def load_data(attr, old, new):
+    init_app()
     select_x.options = ["select variable x"]
     select_y.options = ["select variable y"]
     select_color.options = ["select variable color"]
@@ -254,9 +238,9 @@ def load_data(attr, old, new):
     data = data.dropna()
     source.data=data
     data_table.columns=[TableColumn(field=col, title=col) for col in data.columns]
-    select_color.options =(select_color.options)+([option for option in list(data.columns) if verifier_type_var(data,option)=="String"])
-    select_x.options =(select_x.options)+([option for option in list(data.columns) if verifier_type_var(data,option)=="Numeric"])
-    select_y.options =(select_y.options)+([option for option in list(data.columns) if verifier_type_var(data,option)=="Numeric"])
+    select_color.options =(select_color.options)+([option for option in list(data.columns) if verifier_type_var(data,str(option))=="String"])
+    select_x.options =(select_x.options)+([option for option in list(data.columns) if verifier_type_var(data,str(option))=="Numeric"])
+    select_y.options =(select_y.options)+([option for option in list(data.columns) if verifier_type_var(data,str(option))=="Numeric"])
     # SELECT APPRENTISSAGE
     select_cible.options =(select_cible.options)+([option for option in list(data.columns)])
     multi_select_explicative.options =[option for option in list(data.columns)]
@@ -277,9 +261,49 @@ def load_data(attr, old, new):
         'x': [np.random.uniform(low=0, high=1, size=20)],
         'y': [np.random.uniform(low=0, high=1, size=20)]}
     
+    
+def init_app():
+    child_reg1.children[0]= saut_ligne
+    child_reg1.children[1]= saut_ligne
+    child_reg1.children[2]= saut_ligne
+    child_reg1.children[3]= saut_ligne
+    child_reg1.children[4]= saut_ligne
+    child_reg1.children[5]= saut_ligne
+    
+    child_reg2.children[0]=saut_ligne
+    child_reg2.children[1]=saut_ligne
+    child_reg2.children[2]=saut_ligne
+    child_reg2.children[3]=saut_ligne
+    child_reg2.children[4]=saut_ligne
+    child_reg2.children[5]=saut_ligne
+    child_reg2.children[6]=saut_ligne
+    
+    child_reg3.children[0]=saut_ligne
+    child_reg3.children[1]=saut_ligne
+    child_reg3.children[2]=saut_ligne
+
+    
+    child_reg4.children[0] = saut_ligne
+    child_reg4.children[1] = saut_ligne
+    child_reg4.children[2] = saut_ligne
+    child_reg4.children[3]= saut_ligne
+    child_reg4.children[4]= saut_ligne
+    child_reg4.children[5]= saut_ligne
+    child_reg4.children[6]= saut_ligne
+    child_perf.children[0]= saut_ligne
+    child_perf.children[1]= saut_ligne
+    child_perf.children[2]= saut_ligne
+    child_perf.children[3]= saut_ligne
+    child_perf.children[4]= saut_ligne
+    child_perf.children[5]= saut_ligne
+    child_perf.children[6]= saut_ligne
+    
+    child_var.children[0] = saut_ligne
+    child_var.children[1] = saut_ligne
+    
 ''' REFRESH AREGRESSION ALGORITHME'''
 def refresh_reg_multi(obj):
-    #child_reg1.children[0]=obj.msg
+    
     child_reg1.children[0]=saut_ligne
     child_reg1.children[1]=obj.title_intercept
     child_reg1.children[2]=obj.intercept
@@ -405,7 +429,7 @@ def refresh_random_forest(obj):
 '''CLASSIFICATION ALGORITHME'''
     
 def refresh_decision_tree(obj):
-    
+
     child_reg1.children[0]=saut_ligne
     child_reg1.children[1]=obj.distribprediction1 
     child_reg1.children[2]=obj.distribpredictions2 
@@ -488,6 +512,7 @@ def refresh_analyse_discriminante(obj):
     
 
 def refresh_regression_logistique(obj):
+    
     child_reg1.children[0]= obj.intercept
     child_reg1.children[1]= saut_ligne 
     child_reg1.children[2]= obj.coefficients 
@@ -550,18 +575,17 @@ corr_plot.title_location="above"
 plot_proj = figure(title="Projection dans le plan par rapport à sepal_length et sepal_width",plot_height = 350)
 
 # TABS PANEL SECTION 
-title = Div(text="<center><h2>INTERFACE D'ANALYSE DE DONNÉES</h2></center>", height=2)
+title = Div(text="<center><h2>INTERFACE D'ANALYSE DE DONNÉES</h2></center>")
 p1 = Div(text="<h3>Statistique Descriptive et visualisation </h3>")
 line1 = Paragraph(text="____________________________________________________________________________")
-p2  = Div(text="<h3>Apprentissage suppervisé</h3>",height=2)
-p3  = Div(text="<h3>Quelques Prétraitements</h3>",height=2)
+p2  = Div(text="<h3>Apprentissage suppervisé</h3>")
+tmp  = Div(text="<h3>Apprentissage suppervisé</h3>")
 
 
 # CREATION SECTION 
 section0 = column(title,line1)
 section1 = column(p1)
 section3 = column(p2)
-section2 = column(p3)
 
 
 header_coefficient = Div(text="")
@@ -574,10 +598,9 @@ panel2= Panel(child=data_table_summary, title="Statistiques descriptives")
 panel3= Panel(child=row(corr_plot,data_table_corr), title="Corrélation entre Variables quantitatives")
 panel4= Panel(child=plot_proj, title="Projection des points dans le plan")
 
-# AFFICHAGE APPRENTISSAGE SUPPERVISÉ
-#creation du layout correspondant
+# MISE EN PAGE POUR AFFICHAGE APPRENTISSAGE SUPPERVISÉ
 line=Div(text="")
-Previsualisation_data=Div(text="<center><h2 >Prévisualisation des données</h2></center>")
+Previsualisation_data=Div(text="<center><h2>Prévisualisation des données</h2></center>")
 saut_ligne=Div(text="<br/>")
 title_reg=Div(text="<center><h3>Sortie apprentissage suppervisé</h3></center>")
 
@@ -599,8 +622,6 @@ layout = row(column(section0,
                     select_x, 
                     select_y,
                     select_color,
-                    section2,
-                    #multi_choice,
                     section3,
                     select_cible,
                     multi_select_explicative,
