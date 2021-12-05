@@ -78,9 +78,7 @@ A second section (Supervised Learning) where the user can choose the type of alg
 <img width="500" alt="Capture d’écran 2021-12-05 à 18 01 04" src="https://user-images.githubusercontent.com/31353252/144758008-30db1661-3a27-4b46-a468-e566709851e5.png">
 </div>
 
-The second subsection deals with the visualization of the results (graph, evaluation metrics):
-
-There are also four tabs:
+The second subsection deals with the visualization of the results (graph, evaluation metrics). There are also four tabs:
 
 - Model output: represents the different results of the cross-validation as well as the coefficients of the regression in the case of a regression.
 - Prediction on the test sample: in the form of a graph allowing to perceive in a synthetic way the difference between the predictions and the reality.
