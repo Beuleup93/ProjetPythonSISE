@@ -53,3 +53,9 @@ Our interface is organized in sections: <br/>
 A first sub-section allowing the user to select the parameters necessary to perform the analysis desired by the user. The user can load his data set in .csv or .xlsx format, choose the x and y variables to be correlated together and a projection variable if he wishes, to project the points in the plane.
 - The second subsection provides an overview of all exploratory analyses of the data. 
 
+<div align="center">
+  <img width="750" alt="Capture d’écran 2021-12-05 à 17 45 26" src="https://user-images.githubusercontent.com/31353252/144757421-1fc0e00b-cffb-47a1-bed9-27c8c271d053.png">
+<img width="750" alt="Capture d’écran 2021-12-05 à 17 45 57" src="https://user-images.githubusercontent.com/31353252/144757423-3ba042c7-2596-4661-ae44-75efd73a70fe.png">
+<img width="750" alt="Capture d’écran 2021-12-05 à 17 46 18" src="https://user-images.githubusercontent.com/31353252/144757439-e78e2c21-b2af-489f-8025-3e380fe27209.png">
+</div>
+
