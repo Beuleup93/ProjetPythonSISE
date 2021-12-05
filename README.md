@@ -59,10 +59,32 @@ A first sub-section allowing the user to select the parameters necessary to perf
 <img width="750" alt="Capture d’écran 2021-12-05 à 17 46 18" src="https://user-images.githubusercontent.com/31353252/144757439-e78e2c21-b2af-489f-8025-3e380fe27209.png">
 </div>
 <br/>
-It includes four tabs:
-- **Dataset** to view the dataset
-- **Descriptive statistics** to summarize the information contained in the dataset in the form of a summary table (mean, standard deviation, quartiles, min, max, etc.)
-- **Correlation between quantitative variables** represents the link between quantitative variables in the form of a scatter plot and correlation matrix. 
-- **Projection of points in the plane** represents the scatter plot according to the chosen qualitative variable (each modality is represented by a color).
+
+It includes four tabs: <br/>
+* Dataset to view the dataset
+* Descriptive statistics to summarize the information contained in the dataset in the form of a summary table (mean, standard deviation, quartiles, min, max, etc.)
+* Correlation between quantitative variables represents the link between quantitative variables in the form of a scatter plot and correlation matrix. 
+* Projection of points in the plane represents the scatter plot according to the chosen qualitative variable (each modality is represented by a color).
+<br/>
+
+A second section (Supervised Learning) where the user can choose the type of algorithm to be executed with the corresponding parameters. It is also divided into two sub-sections:
+- The first sub-section gives the user two drop-down lists to select the predictor variables and the target variable. The type of this variable (qualitative or quantitative) conditions the algorithms that can be applied and the available explanatory variables.
+- A drop-down list to choose the algorithm according to his needs (classification or régression)
+- Several sliders to define the optimal values of the main hyperparameters <br/>
+<br/>
+
+<div align="center">
+<img width="500" alt="Capture d’écran 2021-12-05 à 18 00 29" src="https://user-images.githubusercontent.com/31353252/144758005-baa56051-0ae3-4202-9044-55da7ef629db.png"> <br/>
+<img width="500" alt="Capture d’écran 2021-12-05 à 18 01 04" src="https://user-images.githubusercontent.com/31353252/144758008-30db1661-3a27-4b46-a468-e566709851e5.png">
+</div>
+
+The second subsection deals with the visualization of the results (graph, evaluation metrics):
+
+There are also four tabs:
+
+- Model output: represents the different results of the cross-validation as well as the coefficients of the regression in the case of a regression.
+- Prediction on the test sample: in the form of a graph allowing to perceive in a synthetic way the difference between the predictions and the reality.
+- Performance measures: includes the evaluation indicators of the model (MAE, MSE, RMSE, R2).
+- Relevant variables: allows to visualize the most important variables in the model.
 
 
