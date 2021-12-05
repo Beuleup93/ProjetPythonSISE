@@ -47,3 +47,9 @@ In this section, we will provide you with a user's guide, presenting the differe
 <div align = "center">
 <img width="800" alt="Capture d’écran 2021-12-05 à 16 22 36" src="https://user-images.githubusercontent.com/31353252/144754628-d65bb441-c83a-44f0-9452-e2dfef0f5a1d.png">
 </div>
+
+Our interface is organized in sections: <br/>
+- A first section (**data loading and descriptive statistics**) where we allow the user to load their data and see the descriptive statistics. It is divided into two sub-sections: 
+A first sub-section allowing the user to select the parameters necessary to perform the analysis desired by the user. The user can load his data set in .csv or .xlsx format, choose the x and y variables to be correlated together and a projection variable if he wishes, to project the points in the plane.
+- The second subsection provides an overview of all exploratory analyses of the data. 
+
