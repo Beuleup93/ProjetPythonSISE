@@ -58,4 +58,11 @@ A first sub-section allowing the user to select the parameters necessary to perf
 <img width="750" alt="Capture d’écran 2021-12-05 à 17 45 57" src="https://user-images.githubusercontent.com/31353252/144757423-3ba042c7-2596-4661-ae44-75efd73a70fe.png">
 <img width="750" alt="Capture d’écran 2021-12-05 à 17 46 18" src="https://user-images.githubusercontent.com/31353252/144757439-e78e2c21-b2af-489f-8025-3e380fe27209.png">
 </div>
+<br/>
+It includes four tabs:
+- **Dataset** to view the dataset
+- **Descriptive statistics** to summarize the information contained in the dataset in the form of a summary table (mean, standard deviation, quartiles, min, max, etc.)
+- **Correlation between quantitative variables** represents the link between quantitative variables in the form of a scatter plot and correlation matrix. 
+- **Projection of points in the plane** represents the scatter plot according to the chosen qualitative variable (each modality is represented by a color).
+
 
