@@ -85,6 +85,12 @@ There are also four tabs:
 - Model output: represents the different results of the cross-validation as well as the coefficients of the regression in the case of a regression.
 - Prediction on the test sample: in the form of a graph allowing to perceive in a synthetic way the difference between the predictions and the reality.
 - Performance measures: includes the evaluation indicators of the model (MAE, MSE, RMSE, R2).
-- Relevant variables: allows to visualize the most important variables in the model.
+- Relevant variables: allows to visualize the most important variables in the model. <br/>
+
+<div align="center">
+  <img width="500" alt="Capture d’écran 2021-12-05 à 18 01 46" src="https://user-images.githubusercontent.com/31353252/144758009-65cd591f-5376-4d99-ac62-d91cd8aa3ecf.png">
+<img width="500" alt="Capture d’écran 2021-12-05 à 18 02 33" src="https://user-images.githubusercontent.com/31353252/144758010-435b7317-a1af-4083-8d9c-815227e93502.png">
+</div>
+
 
 
